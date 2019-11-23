@@ -1,57 +1,76 @@
-var express = require('express')
-var path = require('path')
-var bodyParser = require('body-parser')
-var cookieSession = require('cookie-session')
-var mongoose = require('mongoose')
-var accountRouter = require('./server/routes/account.js')
-var app = express()
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const session = require('express-session');
+const db = require('../db/api');
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/hw5-new')
+const app = express();
 
-app.engine('html', require('ejs').__express)
-app.set('view engine', 'html')
+// Register body parser middleware
+app.use(session({secret: 'alkdfjalk', resave: true, saveUninitialized: true}));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use('/static', express.static(path.join(__dirname, 'static')))
+// Set 'public' to be a static directory
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+// Connect to the database
+require('../db/dbconnect');
 
-// TODO: configure body parser middleware to also accept json. just do
-// app.use(bodyParser.json())
+app.get('/login', (req,res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+});
 
-app.use(
-  cookieSession({
-    name: 'local-session',
-    keys: ['spooky'],
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
-  })
-)
+app.get('/signup', (req,res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'signup.html'));
+});
 
-app.get('/', function(req, res, next) {
-  Question.find({}, function(err, result) {
-    if (err) next(err)
-    res.render('index', {
-      questions: result,
-      user: req.session.user,
-    })
-  })
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  db.users.findAll({
+    where: {
+      username: username, 
+      password: password,
+    }})
+  .then(users => {
+    console.log(users);
+    req.session.userId = username;
+    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
+  });
+});
+
+app.post('/signup', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  db.users.addUser(username, password).then(() => {
+    req.session.userId = username;
+    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
+  });
+});
+
+app.get('/logout', (req, res) => {
+  console.log("hi");
+  req.session.userId = null;
+  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+});
+
+app.use((req,res,next) => {
+  if (!req.session.userId) {
+    res.redirect('/login')
+  } else {
+    next()
+  }
 })
 
-app.post('/', function(req, res, next) {
-  var questionText = req.body.question
-  var q = new Question({ questionText: questionText, author: req.session.user })
-  q.save(function(err) {
-    if (!err) {
-      res.redirect('/')
-    } else {
-      next(err)
-    }
-  })
-})
 
-app.use('/account', accountRouter)
+// Load the api router onto app
+app.use('/api', require('./server/routes/apirouter'));
 
 
-app.listen(process.env.PORT || 3000, function() {
-  console.log('App listening on port ' + (process.env.PORT || 3000))
-})
+// Any non-api routes should be sent the html file as a response
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
+});
+
+app.listen(3000, () => console.log('listening...'));
