@@ -1,5 +1,5 @@
 // Connect to the database and import models
-const { todo, user } = require('./dbconnect');
+const { todo, user, message } = require('./dbconnect');
 
 // Todo functions
 
@@ -22,13 +22,40 @@ function removeTodo(todoId) {
 
 function addUser(username, password) {
   return user.create({username: username, password: password}). then(() => {
-    console.log(username + ' ' + password);
     return user.findAll();
   });
 }
 
 function checkUser(username, password) {
-  console.log(user.findAll());
+  return user.count({
+    where: {
+      username: username,
+      password: password,
+    }
+  }).then(count =>
+    {
+      if (count > 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  );
+}
+
+function addMsg(user, msg) {
+  return message.create({ user: user, messageVal: msg }).then(() => {
+    return message.findAll();
+  });
+}
+
+function getMessages() {
+  return message.findAll();
+}
+
+// removes a todo by id and then returns all todos
+function removeMsg(msgId) {
+  return message.destroy(msgId).then(() => message.findAll());
 }
 
 // Export the functions so that they can be used throughout your backend
@@ -41,5 +68,10 @@ module.exports = {
   users: {
     addUser,
     checkUser,
+  },
+  messages: {
+    addMsg,
+    getMessages,
+    removeMsg
   }
 };

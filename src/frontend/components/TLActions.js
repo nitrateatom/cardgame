@@ -19,7 +19,7 @@ class TLActions extends React.Component {
           onChange={e => this.setState({ value: e.target.value })}
         />
         <button onClick={() => this.props.addItem(this.state.value)}>
-          Add Item
+          Create Room
         </button>
       </div>
     );

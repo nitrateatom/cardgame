@@ -7,7 +7,7 @@ class TLItem extends React.Component {
   render() {
     return (
       <div>
-        <p>{this.props.item.taskname}</p>
+        <p>{this.props.item.messageVal}</p>
         <button onClick={() => this.props.removeItem(this.props.item.id)}>
           X
         </button>

@@ -5,6 +5,12 @@ const session = require('express-session');
 const db = require('../db/api');
 
 const app = express();
+const server = require('http').createServer(app);
+const io = require('socket.io').listen(server);
+
+users = [];
+connections = [];
+
 
 // Register body parser middleware
 app.use(session({secret: 'alkdfjalk', resave: true, saveUninitialized: true}));
@@ -17,8 +23,14 @@ app.use(express.static(path.join(__dirname, '..', 'public')));
 // Connect to the database
 require('../db/dbconnect');
 
+
+
 app.get('/login', (req,res) => {
-  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  if (!req.session.userId) {
+    res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  } else {
+    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
+  }
 });
 
 app.get('/signup', (req,res) => {
@@ -28,16 +40,25 @@ app.get('/signup', (req,res) => {
 app.post('/login', (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
-  db.users.findAll({
-    where: {
-      username: username, 
-      password: password,
-    }})
+  db.users.checkUser(username, password)
   .then(users => {
-    console.log(users);
-    req.session.userId = username;
-    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
+    if (users) {
+      req.session.userId = username;
+      //res.redirect('app.html?user=' + username);
+      //path.join(__dirname, '..', 'public', 'app.html')
+      res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
+    } else {
+      res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+    }
   });
+  // if (db.users.checkUsers(username, password)) {
+  //   console.log("log in");
+  //   req.session.userId = username;
+  //   res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
+  // } else {
+  //   console.log("wrong log in");
+  //   res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  // }
 });
 
 app.post('/signup', (req, res) => {
@@ -50,27 +71,39 @@ app.post('/signup', (req, res) => {
 });
 
 app.get('/logout', (req, res) => {
-  console.log("hi");
   req.session.userId = null;
-  res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  //res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  res.redirect('/login');
 });
 
 app.use((req,res,next) => {
   if (!req.session.userId) {
-    res.redirect('/login')
+    res.redirect('/login');
   } else {
     next()
   }
 })
 
 
+
 // Load the api router onto app
 app.use('/api', require('./server/routes/apirouter'));
-
 
 // Any non-api routes should be sent the html file as a response
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
 });
 
-app.listen(3000, () => console.log('listening...'));
+server.listen(3000, () => console.log('listening...'));
+
+io.sockets.on('connection', function(socket) {
+  connections.push(socket);
+  console.log('Connected: %s sockets connected', connections.length);
+  socket.on('disconnect', function () {
+    connections.splice(connections.indexOf(socket), 1);
+    console.log('Disconnected: %s sockets connected', connections.length);
+  });
+  socket.on('send message', function(data) {
+    io.sockets.emit('new message', {msg: data});
+  });
+});

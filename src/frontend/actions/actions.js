@@ -5,8 +5,22 @@ import {
   GET_TODOS_SUCCESS,
   GET_TODOS_FAILURE,
   REMOVE_TODO_SUCCESS,
-  REMOVE_TODO_FAILURE
+  REMOVE_TODO_FAILURE,
+
+  ADD_MSG_SUCCESS,
+  ADD_MSG_FAILURE,
+  GET_MSGS_SUCCESS,
+  GET_MSGS_FAILURE,
+  REMOVE_MSG_SUCCESS,
+  REMOVE_MSG_FAILURE
 } from './types';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import CardRoom from '../components/CardRoom';
+import reducer from '../reducer/index';
 
 export const addTodo = newTodo => {
   return dispatch => {
@@ -46,3 +60,65 @@ export const removeTodo = todoId => {
       });
   };
 };
+
+export const enterRoom = todoId => {
+  return dispatch => {
+    const store = createStore(reducer, applyMiddleware(thunk));
+
+    ReactDOM.render(
+    // Provider enables descendant react components to access redux store and dispatch actions to redux
+      <Provider store={store}>
+        <CardRoom />
+      </Provider>,
+      document.getElementById('react-app') // binds to <div id="react-app"> in public/index.html
+    );
+    // axios
+    //   .post('/api/remove_todo', { todoId })
+    //   .then(({ data }) => {
+    //     dispatch({ type: REMOVE_TODO_SUCCESS, todos: data });
+    //   })
+    //   .catch(error => {
+    //     dispatch({ type: REMOVE_TODO_FAILURE, error });
+    //   });
+  };
+};
+
+export const addMessage = (user, newMsg) => {
+  return dispatch => {
+    axios
+      .post('/api/addMsg', { user: user, message: newMsg })
+      .then(({ data }) => {
+        dispatch({ type: ADD_MSG_SUCCESS, messages: data });
+      })
+      .catch(error => {
+        dispatch({ type: ADD_MSG_FAILURE, error });
+      });
+  };
+};
+
+export const getMessages = () => {
+  return dispatch => {
+    axios
+      .get('/api/messages')
+      .then(({ data }) => {
+        dispatch({ type: GET_MSGS_SUCCESS, messages: data });
+      })
+      .catch(error => {
+        dispatch({ type: GET_MSGS_FAILURE, error });
+      });
+  };
+};
+
+export const removeMessage = msgId => {
+  return dispatch => {
+    axios
+      .post('/api/remove_message', { msgId })
+      .then(({ data }) => {
+        dispatch({ type: REMOVE_MSG_SUCCESS, messages: data });
+      })
+      .catch(error => {
+        dispatch({ type: REMOVE_MSG_FAILURE, error });
+      });
+  };
+};
+

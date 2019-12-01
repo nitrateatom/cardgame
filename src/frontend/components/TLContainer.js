@@ -2,13 +2,14 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import TLItem from './TLItem';
+import Room from './Room';
 
 class TLContainer extends React.Component {
   render() {
     return (
       <div>
         {this.props.reduxTLItems.map(tli => (
-          <TLItem item={tli} />
+          <Room item={tli} />
         ))}
       </div>
     );
