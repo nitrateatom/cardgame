@@ -19,6 +19,10 @@ var config = {
             presets: ['@babel/preset-env', '@babel/react']
           }
         }
+      },
+      {
+        test: /\.(css|less)$/,
+        use: ["style-loader", "css-loader"]
       }
     ]
   }

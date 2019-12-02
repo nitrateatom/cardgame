@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import TLItem from './TLItem';
 import Room from './Room';
 
 class TLContainer extends React.Component {

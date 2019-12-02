@@ -96,6 +96,7 @@ app.get('*', (req, res) => {
 
 server.listen(3000, () => console.log('listening...'));
 
+
 io.sockets.on('connection', function(socket) {
   connections.push(socket);
   console.log('Connected: %s sockets connected', connections.length);
@@ -103,7 +104,31 @@ io.sockets.on('connection', function(socket) {
     connections.splice(connections.indexOf(socket), 1);
     console.log('Disconnected: %s sockets connected', connections.length);
   });
-  socket.on('send message', function(data) {
-    io.sockets.emit('new message', {msg: data});
-  });
+  socket.on('join room', room => {
+    currRoom = room;
+    socket.join(room, () => {
+      // socket.on('send message', function(data) {
+      //   console.log('server side messages: ', data);
+      //   console.log('server side room: ', room);
+      //   io.in(room).emit('send message', data);
+      // });
+      socket.on('send message', function(data) {
+        console.log(socket.rooms);
+        io.to(room).emit('send message', data);
+      });
+    });
+    io.in(room).emit('new user', 'New user has joined: ' + room);
+    io.in(room).clients((err, client) => {
+      console.log(client);
+    })
+  })
+  // socket.on('send message', function(data) {
+    // console.log('server side messages: ', data);
+    // console.log('server side room:', currRoom);
+    // console.log(typeof currRoom);
+    // io.to(currRoom).emit('send message', data);
+    // io.in(currRoom).clients((err, client) => {
+    //   console.log(client);
+    // })
+  // });
 });

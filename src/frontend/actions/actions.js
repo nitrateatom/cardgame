@@ -61,14 +61,14 @@ export const removeTodo = todoId => {
   };
 };
 
-export const enterRoom = todoId => {
+export const enterRoom = socket => {
   return dispatch => {
     const store = createStore(reducer, applyMiddleware(thunk));
 
     ReactDOM.render(
     // Provider enables descendant react components to access redux store and dispatch actions to redux
       <Provider store={store}>
-        <CardRoom />
+        <CardRoom socket = {socket}/>
       </Provider>,
       document.getElementById('react-app') // binds to <div id="react-app"> in public/index.html
     );
@@ -85,7 +85,8 @@ export const enterRoom = todoId => {
 
 export const addMessage = (user, newMsg) => {
   return dispatch => {
-    axios
+    // dispatch({ type: ADD_MSG_SUCCESS, message: newMsg })
+    return axios
       .post('/api/addMsg', { user: user, message: newMsg })
       .then(({ data }) => {
         dispatch({ type: ADD_MSG_SUCCESS, messages: data });
@@ -98,7 +99,7 @@ export const addMessage = (user, newMsg) => {
 
 export const getMessages = () => {
   return dispatch => {
-    axios
+    return axios
       .get('/api/messages')
       .then(({ data }) => {
         dispatch({ type: GET_MSGS_SUCCESS, messages: data });
@@ -111,7 +112,7 @@ export const getMessages = () => {
 
 export const removeMessage = msgId => {
   return dispatch => {
-    axios
+    return axios
       .post('/api/remove_message', { msgId })
       .then(({ data }) => {
         dispatch({ type: REMOVE_MSG_SUCCESS, messages: data });

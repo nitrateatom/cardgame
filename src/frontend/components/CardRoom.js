@@ -1,14 +1,17 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import io from 'socket.io-client';
+import { createStore, applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
+import counter from '../reducer/cardReducer';
 
 import { getMessages, getTodos } from '../actions/actions';
 
 
 import TLContainer from './TLContainer';
 import Messager from './Messager';
-import MessageContainer from './MessageContainer';
+import Cards from './Cards';
 
 class CardRoom extends React.Component {
   constructor(props) {
@@ -16,23 +19,19 @@ class CardRoom extends React.Component {
 
     // Fetch todos from api server and initialize redux store
     this.props.getMessages();
-    // this.state = {
-    //   socket: io.connect(),
-    // }
-    console.log('entered room');
+    this.state = {
+      socket: this.props.socket,
+      store: createStore(counter, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
+    }
   }
 
   render() {
     return (
-      <div>
-        <Jumbotron>Messages</Jumbotron>
-        <MessageContainer 
-        //socket = {this.state.socket}
-        />
-        <Messager 
-        //socket = {this.state.socket}
-        />
-      </div>
+      <Provider store={this.state.store}>
+        <Jumbotron style = {{textAlign: 'center'}}>The Game</Jumbotron>
+        <Messager socket = {this.state.socket}/>
+        <Cards />
+      </Provider>
     );
   }
 }
