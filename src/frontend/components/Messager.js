@@ -19,7 +19,7 @@ class Messager extends React.Component {
   }
   // get user
   checkLoginStatus() {
-    axios.get('/login').then(
+    axios.get('/getUser').then(
       (response) => {
         if (response.headers.user) {
           this.setState({user: response.headers.user});
@@ -100,4 +100,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Messager);
+export default connect(null, mapDispatchToProps)(Messager);

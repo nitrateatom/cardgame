@@ -1,10 +1,6 @@
 import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import counter from '../reducer/cardReducer';
 
 import { getMessages, getTodos } from '../actions/actions';
 
@@ -21,17 +17,16 @@ class CardRoom extends React.Component {
     this.props.getMessages();
     this.state = {
       socket: this.props.socket,
-      store: createStore(counter, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
     }
   }
 
   render() {
     return (
-      <Provider store={this.state.store}>
+      <div>
         <Jumbotron style = {{textAlign: 'center'}}>The Game</Jumbotron>
         <Messager socket = {this.state.socket}/>
         <Cards />
-      </Provider>
+      </div>
     );
   }
 }

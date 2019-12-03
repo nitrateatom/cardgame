@@ -9,6 +9,7 @@ import {
 
 export default (state = [], action) => {
   let stateCopy = state.slice();
+  // let stateCopy = Object.assign({}, state);
   switch (action.type) {
     case GET_TODOS_SUCCESS:
       return action.todos;
@@ -22,6 +23,10 @@ export default (state = [], action) => {
       return action.messages;
     case REMOVE_MSG_SUCCESS:
       return action.messages;
+    case 'UPDATE_DECK':
+      console.log('reducer: ', action);
+      // stateCopy = action.deck;
+      return action.deck;
   }
   return stateCopy;
 };

@@ -8,7 +8,7 @@ class TLContainer extends React.Component {
     return (
       <div>
         {this.props.reduxTLItems.map(tli => (
-          <Room item={tli} />
+          <Room item={tli} enterRoom = {this.props.enterRoom}/>
         ))}
       </div>
     );

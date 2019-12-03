@@ -14,13 +14,6 @@ import {
   REMOVE_MSG_SUCCESS,
   REMOVE_MSG_FAILURE
 } from './types';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { createStore, applyMiddleware } from 'redux';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import CardRoom from '../components/CardRoom';
-import reducer from '../reducer/index';
 
 export const addTodo = newTodo => {
   return dispatch => {
@@ -61,28 +54,6 @@ export const removeTodo = todoId => {
   };
 };
 
-export const enterRoom = socket => {
-  return dispatch => {
-    const store = createStore(reducer, applyMiddleware(thunk));
-
-    ReactDOM.render(
-    // Provider enables descendant react components to access redux store and dispatch actions to redux
-      <Provider store={store}>
-        <CardRoom socket = {socket}/>
-      </Provider>,
-      document.getElementById('react-app') // binds to <div id="react-app"> in public/index.html
-    );
-    // axios
-    //   .post('/api/remove_todo', { todoId })
-    //   .then(({ data }) => {
-    //     dispatch({ type: REMOVE_TODO_SUCCESS, todos: data });
-    //   })
-    //   .catch(error => {
-    //     dispatch({ type: REMOVE_TODO_FAILURE, error });
-    //   });
-  };
-};
-
 export const addMessage = (user, newMsg) => {
   return dispatch => {
     // dispatch({ type: ADD_MSG_SUCCESS, message: newMsg })
@@ -120,6 +91,13 @@ export const removeMessage = msgId => {
       .catch(error => {
         dispatch({ type: REMOVE_MSG_FAILURE, error });
       });
+  };
+};
+
+export const updateDeck = deck => {
+  return dispatch => {
+    console.log('actions: ', deck);
+    return dispatch({ type: 'UPDATE_DECK', deck: deck });
   };
 };
 

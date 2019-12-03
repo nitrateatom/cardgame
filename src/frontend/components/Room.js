@@ -20,16 +20,17 @@ class Room extends React.Component {
   }
 }
 //this.props.item.id
-const mapDispatchToProps = dispatch => {
-  return {
-    // implement enter room
-    enterRoom: room => {
-      var socket = io.connect();
-      socket.emit('join room', room);
-      socket.on('new user', res => console.log(res));
-      dispatch(enterRoom(socket))
-    }
-  };
-};
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     // implement enter room
+//     enterRoom: room => {
+//       var socket = io.connect();
+//       socket.emit('join room', room);
+//       socket.on('new user', res => console.log(res));
+//       dispatch(enterRoom(socket))
+//     }
+//   };
+// };
 
-export default connect(null, mapDispatchToProps)(Room);
+// export default connect(null, mapDispatchToProps)(Room);
+export default connect(null, null)(Room);

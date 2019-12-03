@@ -1,10 +1,12 @@
-const counter = (state = 0, action) => {
+const deckReducer = (state = [], action) => {
+  let stateCopy = state.slice();
   switch (action.type) {
-    case 'INCREMENT':
-      return state + 1;
-    case 'DECREMENT':
-      return state - 1;
+    case 'UPDATE_DECK':
+      return action.deck;
+    case 'GET_DECK':
+      return action.deck;
   }
+  return stateCopy;
 }
 
-export default counter;
+export default deckReducer;

@@ -29,7 +29,7 @@ app.get('/login', (req,res) => {
   if (!req.session.userId) {
     res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
   } else {
-    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
+    res.redirect('/');
   }
 });
 
@@ -44,9 +44,9 @@ app.post('/login', (req, res) => {
   .then(users => {
     if (users) {
       req.session.userId = username;
-      //res.redirect('app.html?user=' + username);
+      res.redirect('/');
       //path.join(__dirname, '..', 'public', 'app.html')
-      res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
+      // res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
     } else {
       res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
     }
@@ -68,6 +68,14 @@ app.post('/signup', (req, res) => {
     req.session.userId = username;
     res.sendFile(path.join(__dirname, '..', 'public', 'app.html'));
   });
+});
+
+app.get('/getUser', (req,res) => {
+  if (!req.session.userId) {
+    res.sendFile(path.join(__dirname, '..', 'public', 'login.html'));
+  } else {
+    res.sendFile(path.join(__dirname, '..', 'public', 'app.html'), {headers:{'user': req.session.userId}});
+  }
 });
 
 app.get('/logout', (req, res) => {
