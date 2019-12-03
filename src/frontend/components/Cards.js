@@ -16,7 +16,7 @@ class Cards extends React.Component {
     };
 
     const suits = ["♠︎", "♥︎", "♣︎", "♦︎"];
-    const values = ["A", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+    const values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
     let card = [];
 
     for (let x = 0; x < suits.length; x++) {
@@ -53,10 +53,6 @@ class Cards extends React.Component {
     this.props.updateDeck(deck);
     return deck;
   }
-  
-  // handleF() {
-  //   console.log('hi');
-  // }
 
 
   flipped(card) {
@@ -86,6 +82,10 @@ class Cards extends React.Component {
       return
     }
 
+    if (currentPair[0] === card) {
+      return
+    }
+
     this.handleNewPair(card);
   }
 
@@ -103,7 +103,6 @@ class Cards extends React.Component {
   }
   
   render() {
-    console.log('reduxDeck:', this.props.ReduxDeck);
     return (  
       <div>
         <button onClick={() => this.shuffleCards(this.state.deck)}>Shuffle</button>

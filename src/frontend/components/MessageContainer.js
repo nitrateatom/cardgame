@@ -1,8 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
 
-import MessageIndividual from './MessageIndividual';
-import Room from './Room';
 import { Table } from 'react-bootstrap'
 
 class MessageContainer extends React.Component {
@@ -39,11 +36,4 @@ class MessageContainer extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    reduxTLItems: state
-  };
-};
-
-// export default connect(mapStateToProps)(MessageContainer);
 export default MessageContainer

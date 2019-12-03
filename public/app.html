@@ -8,11 +8,17 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="" />
+    <style>
+        .logout-box {
+          max-width: 330px;
+          margin: 0 auto;
+        }
+      </style>
   </head>
   <body>
     <div id="react-app"></div>
-
-    <a href = "/logout"><button>log out</button></a>
+    <div class = "logout-box">
+    <a href = "/logout" class = "btn btn-info btn-block">log out</a></div>
     <!--Note that this bundle.js is put in the public directory by webpack -->
     <script src="/bundle.js"></script>
   </body>

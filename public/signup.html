@@ -8,16 +8,36 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <style>
+      body {
+        padding-top: 15px;
+        font-size: 12px
+      }
+      .main {
+        max-width: 320px;
+        margin: 0 auto;
+      }
+      h3 {
+        text-align: center;
+        line-height: 300%;
+      }
+      .login-box {
+        max-width: 330px;
+        margin: 0 auto;
+      }
+     </style>
   </head>
   <body>
-    <h1>Sign Up Page</h1>
-    <form action = "\signup" method = "post">
-      Username:
-      <input type = "text" name = "username"> <br>
-      Password: 
-      <input type = "password" name = "password">
-      <button type = "submit">Sign Up</button>
-    </form><br>
-    <a href = "login.html">Log In</a>
+    <h3>Sign Up Page</h3>
+    <div class = "login-box">
+        <form action = "\signup" method = "post">
+          <label>Username:</label>
+          <input type = "text" name = "username" class="form-control"> <br>
+          <label>Password: </label>
+          <input type = "password" name = "password" class="form-control">
+          <button class="btn btn btn-primary" type = "submit">Sign Up</button>
+        </form><br>
+        <a href = "login.html" class = "btn btn-lg btn-info btn-block" role="button">Log In</a>
+      </div>
   </body>
 </html>

@@ -4,7 +4,6 @@ import { ADD_TODO_SUCCESS } from '../actions/types';
 import { addMessage, removeMessage, getMessages } from '../actions/actions';
 import axios from 'axios';
 import MessageContainer from './MessageContainer';
-import { Table } from 'react-bootstrap'
 
 class Messager extends React.Component {
   constructor(props) {

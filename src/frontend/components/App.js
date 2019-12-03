@@ -46,7 +46,10 @@ class App extends React.Component {
   render() {
     if (this.state.room === '') {
       return (
-      <div>
+      <div style = {{
+        maxWidth: '300px',
+        margin: '0 auto'
+      }}>
         <h1>Rooms</h1>
         <TLContainer enterRoom = {this.enterRoom}/>
         <TLActions />

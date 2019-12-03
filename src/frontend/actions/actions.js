@@ -96,7 +96,6 @@ export const removeMessage = msgId => {
 
 export const updateDeck = deck => {
   return dispatch => {
-    console.log('actions: ', deck);
     return dispatch({ type: 'UPDATE_DECK', deck: deck });
   };
 };

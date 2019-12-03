@@ -2,7 +2,7 @@ import React from 'react';
 import { Jumbotron } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
-import { getMessages, getTodos } from '../actions/actions';
+import { getMessages } from '../actions/actions';
 
 
 import TLContainer from './TLContainer';
@@ -23,7 +23,7 @@ class CardRoom extends React.Component {
   render() {
     return (
       <div>
-        <Jumbotron style = {{textAlign: 'center'}}>The Game</Jumbotron>
+        <Jumbotron style = {{textAlign: 'center'}}>The Memory Game</Jumbotron>
         <Messager socket = {this.state.socket}/>
         <Cards />
       </div>

@@ -1,20 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { enterRoom } from '../actions/actions';
-import io from 'socket.io-client';
-
 // const socket = io('localhost:3000')
 
 class Room extends React.Component {
   render() {
     return (
-      <div>
-        <p>{this.props.item.taskname}
-        <button onClick={() => this.props.enterRoom(this.props.item.taskname)}>
+      <div style ={{padding: '1px'}}>
+        <span style = {{paddingRight: '5px'}}>{this.props.item.taskname}</span>
+        <button 
+          onClick={() => this.props.enterRoom(this.props.item.taskname)}
+          className = 'btn btn-info'>
           Join Room
         </button>
-        </p>
       </div>
     );
   }

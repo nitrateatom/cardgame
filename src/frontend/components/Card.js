@@ -6,7 +6,6 @@ const Card = (props) => {
     return (
     <div className={`card ${props.flipped} card-black`} key = {props} >
       <div onClick = {() => {
-        console.log(props.value);
         props.clickFunction(props.card)
       }} >
         <div className="card-tl">
@@ -30,7 +29,6 @@ const Card = (props) => {
   } else {
     return (
     <div className={`card ${props.flipped} card-black`}  key = {props} onClick = {() => {
-      console.log(props.value);
       props.clickFunction(props.card)
     }} >
       <div className="card-tl">
