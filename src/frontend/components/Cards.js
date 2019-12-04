@@ -106,6 +106,7 @@ class Cards extends React.Component {
     return (  
       <div>
         <button onClick={() => this.shuffleCards(this.state.deck)}>Shuffle</button>
+        <div>Guesses: {this.state.guesses}</div>
         <div className="deck">
           {this.state.deck.map(card => <Card 
               card = {card}
